@@ -39,7 +39,7 @@ buses = r.json()
 
 sorted_buses = []
 for b in buses:
-    sorted_buses.append({'bus': b[u'lineName'], 'arrival': datetime.strptime(b[u'timeToLive'], '%Y-%m-%dT%H:%M:%S%fZ')})
+    sorted_buses.append({'bus': b[u'lineName'], 'destinationName': b[u'destinationName'], 'arrival': datetime.strptime(b[u'timeToLive'], '%Y-%m-%dT%H:%M:%S%fZ')})
 
 sorted_buses = sorted(sorted_buses, key=lambda k: k['arrival'])
 ##truncate sorted buses to just next three arrivals
@@ -47,14 +47,32 @@ sorted_busestrun = sorted_buses[0:3]
 #print(sorted_busestrun) #unhash to see full string
 
 #return buses to console, this is as far as ive got
-for bus in sorted_busestrun:
-    time = bus['arrival'] - datetime.now()
-    print("%s in %s mins" % (bus['bus'],  time.seconds/60))
+for ix, bus in enumerate(sorted_busestrun, 1):
+
+    time = (bus['arrival'] - datetime.now()).seconds / 60
+    if time < 1:
+        disptime = "Due"
+    elif time < 2:
+        disptime = "1 Min"
+    else:
+        disptime = "{} Mins".format(int(time))
+    dest = bus['destinationName'].split(',')[0]
+    print("{} {}: {}".format(bus['bus'], dest, disptime))
 
 #attempt to draw output to phat, breaks output image lines 
-#for bus in sorted_busestrun:
-#    time = bus['arrival'] - datetime.now()
-#    draw.text ((1, bus*34-33)  ((bus['bus'],  time.seconds/60), inky_display.BLACK, font=font) #2nd coord should start at 1 and increase by 34 to move each output down phat screen
+for ix, bus in enumerate(sorted_busestrun, 1):
+
+    time = (bus['arrival'] - datetime.now()).seconds / 60
+    if time < 1:
+        disptime = "Due"
+    elif time < 2:
+        disptime = "1 Min"
+    else:
+        disptime = "{} Mins".format(int(time))
+    dest = bus['destinationName'].split(',')[0]
+
+    draw.text ((1, ix*34-33)  ((bus['bus'], dest), inky_display.BLACK, font=font) #2nd coord should start at 1 and increase by 34 to move each output down phat screen
+    draw.text ((160, ix*34-33)  (disptime), inky_display.BLACK, font=font) #2nd coord should start at 1 and increase by 34 to move each output down phat screen
 
 #dummy data to demonstrate phat output
 #draw.text((1, 1), "E1", inky_display.BLACK, font=font) 
