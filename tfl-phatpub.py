@@ -51,11 +51,11 @@ for ix, bus in enumerate(sorted_busestrun, 1):
 
     time = (bus['arrival'] - datetime.now()).seconds / 60
     if time < 1:
-        disptime = "Due"
+        disptime = "due"
     elif time < 2:
-        disptime = "1 Min"
+        disptime = "1 min"
     else:
-        disptime = "{} Mins".format(int(time))
+        disptime = "{} mins".format(int(time))
     dest = bus['destinationName'].split(',')[0]
     print("{} {}: {}".format(bus['bus'], dest, disptime))
 
@@ -64,15 +64,15 @@ for ix, bus in enumerate(sorted_busestrun, 1):
 
     time = (bus['arrival'] - datetime.now()).seconds / 60
     if time < 1:
-        disptime = "Due"
+        disptime = "due"
     elif time < 2:
-        disptime = "1 Min"
+        disptime = "1 min"
     else:
-        disptime = "{} Mins".format(int(time))
+        disptime = "{} mins".format(int(time))
     dest = bus['destinationName'].split(',')[0]
-
-    draw.text ((1, ix*34-33)  ((bus['bus'], dest), inky_display.BLACK, font=font) #2nd coord should start at 1 and increase by 34 to move each output down phat screen
-    draw.text ((160, ix*34-33)  (disptime), inky_display.BLACK, font=font) #2nd coord should start at 1 and increase by 34 to move each output down phat screen
+    dispbus = "{} {}".format(bus['bus'], dest)
+    draw.text ((1, ix*34-33),  dispbus, inky_display.BLACK, font=font) #2nd coord should start at 1 and increase by 34 to move each output down phat screen
+    draw.text ((160, ix*34-33),  disptime, inky_display.BLACK, font=font) # 2nd coord should start at 1 and increase by 34 to move each output down phat screen
 
 #dummy data to demonstrate phat output
 #draw.text((1, 1), "E1", inky_display.BLACK, font=font) 
